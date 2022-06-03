@@ -21,6 +21,7 @@ for snr_path in pathlist:
         Stand_line =re.match(r'CG_KG[0-9]',line)
         CG_line = re.match(r'CG_HG[0-9]',line)
         Back_line = re.match(r'CG_BG[0-9]',line)
+        Jump_line = re.match(r'/*/*/*SC')
         
         #ボイス命令の変換です
         Kuya_line =re.match(r'空也　（[０-９]）',line)
