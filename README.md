@@ -4,4 +4,4 @@
 http://zero975.cocolog-nifty.com/qt_blog/2007/01/post_a3fc.html
 (Qtの初心者の覚え書き)
 元ソースはRubyで書かれています
-
+(製作途中のベータ版なのでDLしても動作しません)
