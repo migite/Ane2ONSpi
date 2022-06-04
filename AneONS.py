@@ -4,23 +4,25 @@ import glob
 import sys
 import os
 import re
-import unicodedata
 
-for (未定義0) in (未定義1):
+files = glob.glob("./Data/*.txt")
+
+for text in files:
 
     for line in (未定義2):
     
         Comment_line =re.match(r'//',line)
 
-        BGM_line = re.match(r'BG_BGM[0-9]',line)
-        Stand_line = re.match(r'CG_KG[0-9]',line)
-        CG_line = re.match(r'CG_HG[0-9]',line)
-        Back_line = re.match(r'CG_BG[0-9]',line)
-        Jump_line = re.match(r'/*/*/*SC',line)
-        Rabel_line = re.match(r'/*/*/*SS',line)
+        BGM_line = re.match(r'BG_BGM[\d]',line)
+        SE_line = re.match(r'',line)
+        Stand_line = re.match(r'CG_KG[\d]',line)
+        CG_line = re.match(r'CG_HG[\d]',line)
+        Back_line = re.match(r'CG_BG[\d]',line)
+        Rabel_line = re.match(r'/*/*/*SC',line)
+        Jump_line = re.match(r'/*/*/*SS',line)
         
         #ボイス命令の変換です
-        Voice_line =re.match(r'空也||要芽||瀬芦里||巴||雛乃||海||高嶺||いるか||透子||女の子||お嬢様Ａ||お嬢様Ｂ||女子学生Ａ||女子学生Ｂ||女子学生Ｃ　（[０-９]）',line)
+        Voice_line =re.search(r'（[０-９]）',line)
 
 
         if re.search('^\n', line):
@@ -39,28 +41,19 @@ for (未定義0) in (未定義1):
                 line = 'bgmstop'
         #STOP命令がなかった場合、BGM再生を行います
             else: 
-                line.replace('BG_BGM','BGM')
-                line = 'bgm "BGM\\' + BGM_line[1] + '.ogg"\n'
+                line = 'bgm "BGM\\' + str(BGM_line[1].replace('BG_','')) + '.ogg"\n'
         #CG表示の変換です。
         elif CG_line:
-
-            line.replace('CG_HG','HG')
-            line = 'bg "CG\\' + CG_line[1] + '.png",3\n'
+            line = 'bg "CG\\' + str(CG_line[1].replace('CG_','')) + '.png",3\n'
 
         #背景命令の変換です。現時点でCG命令と見かけ上同じですが、後から機能を追加するために分けています。
         elif Back_line:
-
-            line.replace('CG_BG','BG')
-            line = 'bg "CG\\' + Back_line[1] + '.png,3\n'
+            line = 'bg "CG\\' + str(Back_line[1].replace('CG_','')) + '.png,3\n'
        
         #ここからボイス命令の変換
         elif Voice_line:
 
-            #Unicodedataプラグインを用いて全角数字を半角に変換します
-            unicodedata.normalize("NFKC", line)
-
-            #どうしても()が残ってしまうのでrepalceして消します。いい方法あったら教えて。
-            line.replace('(','').replace(')','')
+            line = re.sub(r'（[０-９]）','[0-9]',line)
            
            #主人公はボイスが無いので、発言主部分だけ残して返します。
             if re.match('空也',line):
@@ -88,9 +81,7 @@ for (未定義0) in (未定義1):
 
             elif re.match('雛乃',line):
 
-                line.replace('雛乃','')
-
-                line = '雛乃\n dwave 0 "CV03\\' + Voice_line[1] + '.ogg"\n'
+                line = '雛乃\n dwave 0 "CV03\\' + str(Voice_line[1]).replace('雛乃','') + '.ogg"\n'
 
             elif re.match('海',line):
 
@@ -132,9 +123,14 @@ for (未定義0) in (未定義1):
                 line.replace('女子学生C','')
                 line = '女子学生Ｃ\n dwave 0 "CV13\\' + Voice_line[1] + '.ogg"\n'
 
+            else:
+                line.replace('','')
+
         elif Jump_line:
+
+            re.match('/*/*/*')
             
-            line
+            
 
 
             
